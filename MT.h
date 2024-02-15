@@ -20,6 +20,13 @@ struct Vector4 final {
 	float w;
 };
 
+struct Quaternion {
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
 struct Matrix4x4 final {
 	float m[4][4];
 };
@@ -152,3 +159,21 @@ Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angel);
 
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix, const char* label);
+
+Vector3 VectorMultiply(float sclar, const Vector3& v);
+
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
+
+Matrix4x4 DerectionToDerection(const Vector3& from, const Vector3& to);
+
+Quaternion IdentityQuaternion();
+
+Quaternion Conjugate(const Quaternion& quaternion);
+
+Quaternion NormalizeQuaternion(const Quaternion& quaternion);
+
+Quaternion InverseQuaternion(const Quaternion& quaternion);
+
+float Norm(const Quaternion& quaternion);
+
+Quaternion Multiply(Quaternion lns, Quaternion rhs);
