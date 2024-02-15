@@ -6,6 +6,26 @@
 
 const char kWindowTitle[] = "LE2C_05_オグロ_ハルカ";
 
+static const int kRowHeight = 20;
+static const int kColumnWidth = 60;
+static const int kWindowWidth = 1280;
+static const int kWindowHeght = 720;
+
+void VectorScreenPrintf(int x, int y, Vector3& vector, const char* label) {
+	Novice::ScreenPrintf(x, y, "%0.2f", vector.x);
+	Novice::ScreenPrintf(x + kColumnWidth, y, "%0.2f", vector.y);
+	Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%0.2f", vector.z);
+	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
+}
+
+void QuaternionScreenPrintf(int x, int y, Quaternion& Q, const char* label) {
+	Novice::ScreenPrintf(x, y, "%0.2f", Q.x);
+	Novice::ScreenPrintf(x + kColumnWidth, y, "%0.2f", Q.y);
+	Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%0.2f", Q.z);
+	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%0.2f", Q.w);
+	Novice::ScreenPrintf(x + kColumnWidth * 4, y, "%s", label);
+}
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -15,6 +35,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// キー入力結果を受け取る箱
 	char keys[256] = {0};
 	char preKeys[256] = {0};
+
+	Quaternion rotation =
+		MakeRotateAxisAngleQuaternion(Normalize(Vector3{ 1.0f, 0.4f, -0.2f }), 0.45f);
+	Vector3 pointY = { 2.1f, -0.9f, 1.3f };
+	Matrix4x4 rotateMatrix = MakeQRotateMatrix(rotation);
+
+	Vector3 rotateByQuaternion = RotateVector(pointY, rotation);
+
+	Vector3 rotateByMatrix = Transform(pointY, rotateMatrix);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -39,7 +68,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-
+		QuaternionScreenPrintf(20, 0, rotation, "rotatetion");
+		MatrixScreenPrintf(0, kRowHeight * 1, rotateMatrix, "rotateMatrix");
+		VectorScreenPrintf(0, kRowHeight * 6, rotateByQuaternion, "rotateByQuaternion");
+		VectorScreenPrintf(0, kRowHeight * 7, rotateByMatrix, "rotateByMatrix");
 
 		///
 		/// ↑描画処理ここまで
